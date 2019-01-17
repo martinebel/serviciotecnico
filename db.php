@@ -1,7 +1,7 @@
 ﻿<?php
 	if ( ! session_id() ) @ session_start();
-$serverName = "tcp:10.0.0.150\serverres,5000"; //serverName\instanceName
-$connectionInfo = array( "Database"=>"pruebaryr", "UID"=>"ryr", "PWD"=>"ryr10.*-");
+$serverName = "localhost"; //serverName\instanceName
+$connectionInfo = array( "Database"=>"pruebaryr", "UID"=>"ryr", "PWD"=>"password");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
 if( $conn ) {
