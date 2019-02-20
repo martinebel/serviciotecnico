@@ -28,10 +28,10 @@
 </head>
 
 <body>
+ <?php include 'sidebar.php';?>
+    <div id="wrapper" class="">
 
-    <div id="wrapper" class="toggled">
-
-       <?php include 'sidebar.php';?>
+      
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
@@ -87,7 +87,10 @@ sqlsrv_free_stmt( $stmt);
 											<th style="width:5%"></th>
                                             <th style="width:10%">Cod.</th>
                                             <th style="width:54%">Descripcion</th>
-                                            <th style="width:20%">P.U.</th>
+                                            
+                                            <th style="width:10%">P.U.</th>
+                                            <th style="width:10%">Cant.</th>
+                                            <th style="width:10%">SubTot.</th>
                                         </tr>
                                     </thead>
                                     <tbody id="grilla">
@@ -108,9 +111,11 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 	  <span>'.$row['idproducto'].'</span></td> 
 	  <td><input type="hidden" name="prodescripcion[]" class="form-control" value="'.$row['prodescripcion'].'" readonly>
 	  <span>'.$row['prodescripcion'].'</span></td> 
-	  <td><input type="text" name="pu[]" class="form-control pu" value="'.$row['preciounitario'].'"></td></tr>';
+	  <td><input type="text" name="pu[]" class="form-control pu" value="'.$row['preciounitario'].'"></td>
+    <td><input type="text" name="cant[]" class="form-control pu" value="'.$row['cantidad'].'"></td>
+    <td><input type="text" name="st[]" class="form-control pu" id="st'.$contador.'" value="'.$row['preciototal'].'"  readonly></td></tr>';
 $contador++;
-$total+=$row['preciounitario'];
+$total+=$row['preciototal'];
 	  }
 
 sqlsrv_free_stmt( $stmt);
@@ -165,7 +170,7 @@ $(document).ready(function() {
 $(function() {
     function loadProd(codigo, nombre,precio ) {
 		
-	$("#grilla").append('<tr id="fila'+contador+'"><td><a href="#" onclick="eliminarFila('+contador+');" class="btn btn-primary"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td> <td><input type="hidden" name="procodigo[]" class="form-control" value="'+codigo+'" readonly><span>'+codigo+'</span></td> <td><input type="hidden" name="prodescripcion[]" class="form-control" value="'+nombre+'" readonly><span>'+nombre+'</span></td> <td><input type="text" name="pu[]" class="form-control pu" value="'+parseFloat(precio).toFixed(2)+'"></td></tr>');
+	$("#grilla").append('<tr id="fila'+contador+'"><td><a href="#" onclick="eliminarFila('+contador+');" class="btn btn-primary"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td> <td><input type="hidden" name="procodigo[]" class="form-control" value="'+codigo+'" readonly><span>'+codigo+'</span></td> <td><input type="hidden" name="prodescripcion[]" class="form-control" value="'+nombre+'" readonly><span>'+nombre+'</span></td> <td><input type="text" name="pu[]" class="form-control pu" readonly value="'+parseFloat(precio).toFixed(2)+'"></td><td><input type="text" name="cant[]" class="form-control pu" value="1"></td><td><input type="text" name="st[]" class="form-control pu" id="st'+contador+'" value="'+parseFloat(precio).toFixed(2)+'"  readonly></td></tr>');
 
 calcularTotal();
 
@@ -186,21 +191,25 @@ calcularTotal();
   
   
     //CALCULO DE TOTAL DE FACTURA
-  function calcularTotal()
+   function calcularTotal()
   {
-	  var sumatoria=0;
-	  //calcular subtotales
-	  var pus = document.getElementsByName('pu[]');
+    var sumatoria=0;
+    //calcular subtotales
+    var pus = document.getElementsByName('pu[]');
+    var cants=document.getElementsByName('cant[]');
+     var subtot=document.getElementsByName('st[]');
 for (var h = 0; h <pus.length; h++) {
 var p=pus[h];
+var c = cants[h];
 //calcular total gral
-
-    sumatoria+=parseFloat(p.value);
+$("#st"+h).val((parseFloat(p.value)*parseFloat(c.value)).toFixed(2));
+sumatoria+=(parseFloat(p.value)*parseFloat(c.value));
 
 
   }
  $("#total").val(sumatoria.toFixed(2)); 
   }
+  
   function eliminarFila(fila)
   {
 	  $('#fila'+fila).remove();
@@ -208,14 +217,15 @@ var p=pus[h];
   }
   
   
-     jQuery(document ).on( "change", ".pu", function(){   calcularTotal();});
+ $(document).on('change', '.pu', function() { calcularTotal(); });
+
+  //$('.pu').on( "change",function(){console.log("change");   calcularTotal(); });
    
-	
-	    jQuery(document ).on( "keydown", ".pu", function(events){
+  $(document).on('keydown', '.pu', function() { 
     if(event.keyCode == 13) {
       event.preventDefault();
-	  calcularTotal();
-	}
-	});
+    calcularTotal();
+}
+  });
 </script>
 </html>

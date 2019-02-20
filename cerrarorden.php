@@ -1,6 +1,7 @@
 <?php
 require 'db.php';
 //require_once('email.php');
+//16680
 if(isset($_REQUEST['id'])){$idorden=$_REQUEST['id'];}
 if (isset($_POST['motivocierre']))
 {
@@ -31,6 +32,14 @@ if (isset($_POST['motivocierre']))
 		array_push($precioarray,$aux);
 	}
 	
+	//cantidad
+	$cants=$_POST['cant'];
+	$cantarray=array();
+	foreach($cants as $aux)
+	{
+		array_push($cantarray,$aux);
+	}
+
 	//guardar datos de la orden primero
 	$sql = "update ordenservicio set motivocierre='".$motivocierre."',total='".$total."',estado='CERRADA',fechafin=GETDATE(),cerro=".$_SESSION['idusuario']." where idorden=".$idorden;
 $stmt = sqlsrv_query( $conn, $sql );
@@ -41,10 +50,34 @@ $stmt = sqlsrv_query( $conn, $sql );
 $i=0;
 foreach($codigoarray as $key)
 {
-$sql = "insert into detalleoservicio (idorden,idproducto,prodescripcion,cantidad,preciounitario,preciototal,esgarantia) values(".$idorden.",".$key.",'".$nombrearray[$i]."',1,'".$precioarray[$i]."','".$precioarray[$i]."',0)";
+$sql = "insert into detalleoservicio (idorden,idproducto,prodescripcion,cantidad,preciounitario,preciototal,esgarantia) values(".$idorden.",".$key.",'".$nombrearray[$i]."','".$cantarray[$i]."','".$precioarray[$i]."','".($precioarray[$i]*$cantarray[$i])."',0)";
 $stmt = sqlsrv_query( $conn, $sql );
 $i++;
 }
+
+$sql = "select * from ordenservicio where idorden=".$idorden;
+
+$stmt = sqlsrv_query( $conn, $sql );
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+	$esgarantia=$row["garantia"];
+}
+
+//si cerro en cero, traer producto por defecto
+if(($total==0)&&($esgarantia==0))
+{
+	$sql = "select ProDescripcion,productolista.Importe  from productos inner join ProductoLista on productolista.IdProducto =productos.procodigo where ProCodigo=10220 and IdLista=1";
+
+$stmt = sqlsrv_query( $conn, $sql );
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+	$prodescripcionCero=$row["ProDescripcion"];
+	$proprecioCero=$row['Importe'];
+}
+$sql = "insert into detalleoservicio (idorden,idproducto,prodescripcion,cantidad,preciounitario,preciototal,esgarantia) values(".$idorden.",10220,'".$prodescripcionCero."','1','".$proprecioCero."','".$proprecioCero."',0)";
+$stmt = sqlsrv_query( $conn, $sql );
+$sql = "update ordenservicio set total='".$proprecioCero."' where idorden=".$idorden;
+$stmt = sqlsrv_query( $conn, $sql );
+}
+
 //enviar mail
 $razonsocial="";$email="";
 $sql = "SELECT clientes.clirazonsocial,clientes.cliemail from ordenservicio inner join clientes on clientes.clicodigo=ordenservicio.idcliente where idorden=".$idorden;

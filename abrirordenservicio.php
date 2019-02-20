@@ -33,14 +33,17 @@ if ($normalized_weekday == "sunday") {
 if(isset($_POST['cargador']))
 	{$cargador="1";}else{$cargador="0";}
 
+if(isset($_POST['garantia']))
+	{$garantia="1";}else{$garantia="0";}
+
 //re-guardar los datos del cliente
 $sql="update clientes set clitelefono='".$telefono."',cliemail='".$email."' where clicodigo=".$idcliente;
 sqlsrv_query($conn, $sql); 
 
 
 	//guardar orden de servicio
-$sql = "insert into ordenservicio (idcliente,fechaingreso,motivoingreso,tipo,marca,serie,prioridad,hacerbackup,cargador,recibio,fechafin,motivocierre,cerro,total,estado,fechaaprox) 
-		VALUES (".$idcliente.",GETDATE(),'".$motivoingreso."','".$tipo."','".$marca."','".$serie."','".$prioridad."',".$backup.",".$cargador.",".$_SESSION['idusuario'].",NULL,'',NULL,0,'ABIERTO','".date_format($fechaaprox, 'Y-m-d')."'); SELECT SCOPE_IDENTITY()";
+$sql = "insert into ordenservicio (idcliente,fechaingreso,motivoingreso,tipo,marca,serie,prioridad,hacerbackup,cargador,recibio,fechafin,motivocierre,cerro,total,estado,fechaaprox,garantia) 
+		VALUES (".$idcliente.",GETDATE(),'".$motivoingreso."','".$tipo."','".$marca."','".$serie."','".$prioridad."',".$backup.",".$cargador.",".$_SESSION['idusuario'].",NULL,'',NULL,0,'ABIERTO','".date_format($fechaaprox, 'Y-m-d')."',".$garantia."); SELECT SCOPE_IDENTITY()";
 $resource=sqlsrv_query($conn, $sql, $arrParams); 
 if( $resource === false) {
     die( print_r( sqlsrv_errors(), true) );

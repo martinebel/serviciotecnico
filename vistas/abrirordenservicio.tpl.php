@@ -33,9 +33,10 @@
 </head>
 
 <body>
-<div id="wrapper" class="toggled">
+	<?php include 'sidebar.php';?>
+<div id="wrapper" class="">
 
-        <?php include 'sidebar.php';?>
+        
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
@@ -118,14 +119,18 @@
 						<div class="form-group">
 						
 						<input type="checkbox" name="backup" value="1">Hacer Backup
-						</div>
-				</div>
-				<div class="col-md-col-xs-6">
-						<div class="form-group">
-						
+						<br>
 						<input type="checkbox" name="cargador" value="1">Deja cargador
+						<br>
+						<input type="checkbox" name="garantia" value="1" id="garantia">Entra por Garantia
+						<br>
+						<div class="form-group">
+						<input type="text" class="form-control" name="factura" id="factura" placeholder="Factura" disabled="disabled">
+						</div>
+						
 						</div>
 				</div>
+				
 				<div class="col-md-12 col-xs-12">
 				<hr>
 				<a href="#" style="float:left" id="iraPaso1" class="btn btn-default">< Anterior</a>
@@ -152,7 +157,7 @@
 				</div>
 				<div class="col-md-12">
 				<hr>
-				<a href="#" style="float:left" id="volveraPaso2" class="btn btn-default">< Anterior</a>
+				<a href="abrirordenservicio.php" style="float:left"  class="btn btn-default">Cancelar</a>
 				<input type="submit" style="float:right" class="btn btn-default" value="Imprimir">
 				</div>
 	</div> <!--FIN PASO 3-->
@@ -370,6 +375,12 @@ $( "#iraPaso3" ).on( "click", function() {
 		$("#marca").toggleClass("has-danger");
 		return;
 	}
+
+if(checkGarantia()==false){return;}
+if($("#garantia").is(':checked'))
+	{
+$("#exampleTextarea").val("EQUIPO EN GARANTIA - FACTURA "+$("#factura").val()+" -- "+$("#exampleTextarea").val());
+}
 $("#paso1").css("display","none");
 $("#paso2").css("display","none");
  $("#paso3").css("display","block");
@@ -379,6 +390,56 @@ $( "#iraPaso1" ).on( "click", function() {
  $("#paso2").css("display","none");
  $("#paso1").css("display","block");
 });
+
+function checkGarantia()
+{
+	$("#factura").removeClass("has-danger");
+	if($("#garantia").is(':checked'))
+	{
+		if($("#factura").val().trim() == ''){$("#factura").toggleClass("has-danger");return false;}
+		//comprobar la factura
+		$.ajax({
+        type: "POST",
+        url: "ajax_search.php?factura=true&numero="+$("#factura").val()+"&idcliente="+$("#idcliente").val(),
+        processData: false, 
+        contentType: "application/json"
+    })
+    .done(function(datae, textStatus, jqXHR){
+ var obj = JSON.parse( datae );
+if(obj[0].msg=="ERROR")
+{
+	$("#factura").toggleClass("has-danger");
+	return false;
+}
+else
+{
+	$("#factura").removeClass("has-danger");
+	$("#factura").attr("disabled", "disabled");
+
+	return true;
+}
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){     
+	    
+    });
+	}
+	else
+		{return true;}
+}
+
+$(document).ready(function() {
+
+    $('#garantia').change(function() {
+        if(!this.checked) {
+            $("#factura").attr("disabled", "disabled");
+        }
+        else
+        {
+        	$("#factura").removeAttr("disabled");
+        }        
+    });
+});
+
 </script>
 
 

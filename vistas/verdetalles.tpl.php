@@ -28,10 +28,10 @@
 </head>
 
 <body>
+<?php include 'sidebar.php';?>
+    <div id="wrapper" class="">
 
-    <div id="wrapper" class="toggled">
-
-       <?php include 'sidebar.php';?>
+       
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
@@ -66,8 +66,12 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 
 
 
-  echo '</p><p> <strong>Fecha Entrega: </strong>'.date_format($row['fechaaprox'],'d-m-Y').' </p>
-  </div></div>';
+echo '</p><p> <strong>Fecha Entrega: </strong>'.date_format($row['fechaaprox'],'d-m-Y').' </p>';
+  if($row["garantia"]=="1")
+{
+  echo ' <p style="background:#f2dede;color:#a94442;padding: 5px;border: 1px solid;"><strong>EQUIPO EN GARANTIA</strong></p>';
+}
+ echo ' </div></div>';
 $motivocierre=$row['motivocierre'];
 	  }
 
@@ -129,9 +133,11 @@ sqlsrv_free_stmt( $stmt);
                                     <thead>
                                         <tr>
 											
-                                            <th style="width:10%">Codigo</th>
-                                            <th style="width:60%">Descripcion</th>
-                                            <th style="width:20%">Precio</th>
+                                           <th style="width:10%;text-align:left;">Cod.</th>
+                                            <th style="width:59%;text-align:left;">Descripcion</th>
+                                            <th style="width:10%;text-align:right;">P.U.</th>
+                                            <th style="width:10%;text-align:right;">Cant.</th>
+                                            <th style="width:20%;text-align:right;">S. Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="grilla">
@@ -145,15 +151,16 @@ if( $stmt === false) {
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
       echo '<tr> 
-	  <td>
-	  <span>'.$row['idproducto'].'</span></td> 
-	  <td>
-	  <span>'.$row['prodescripcion'].'</span></td> 
-	  <td>  <span>'.$row['preciounitario'].'</span></td></tr>';
-	  $total+=$row['preciounitario'];
+	  <td><span>'.$row['idproducto'].'</span></td> 
+	  <td> <span>'.$row['prodescripcion'].'</span></td> 
+	  <td style="text-align:right;">  <span>'.$row['preciounitario'].'</span></td>
+      <td style="text-align:right;">  <span>'.$row['cantidad'].'</span></td>
+      <td style="text-align:right;">  <span>'.$row['preciototal'].'</span></td>
+      </tr>';
+	  $total+=$row['preciototal'];
 
 	  }
-echo '<tr><td></td><td>TOTAL</td><td>$'.$total.'</td></tr>';
+echo '<tr><td></td><td>TOTAL</td><td colspan="3" style="text-align:right;">$'.$total.'</td></tr>';
 sqlsrv_free_stmt( $stmt);
 					   ?>
                                     </tbody>

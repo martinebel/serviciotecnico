@@ -28,40 +28,49 @@
 </head>
 
 <body>
+ <?php include 'sidebar.php';?>
 
-    <div id="wrapper" class="toggled">
+    <div id="wrapper" class="">
 
-       <?php include 'sidebar.php';?>
-
+      
         <!-- Page Content -->
         <div id="page-content-wrapper">
 		
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="background-color: #e3e3e3;">
                         <legend>Lista de Ordenes</legend>
 						<form action="listaordenes.php" method="GET" id="formulario">
-						<div class="col-md-4">
-                        <span>Ver </span>
-						<select name="v"  class="form-control" style="width:300px">
-						<option value="0" <?php if($_REQUEST['v']=="0"){echo 'selected';}?>>Ordenes Cerradas</option>
-						<option value="1" <?php if($_REQUEST['v']=="1"){echo 'selected';}?>>Ordenes Abiertas</option>
+						<div class="col-md-2">
+                        <span>Ordenes </span>
+						<select name="v"  class="form-control" >
+						<option value="0" <?php if($_REQUEST['v']=="0"){echo 'selected';}?>>Cerradas</option>
+						<option value="1" <?php if($_REQUEST['v']=="1"){echo 'selected';}?>>Abiertas</option>
 						</select>
 						</div>
+            <div class="col-md-2">
+                        <span>Tipo </span>
+            <select name="t"  class="form-control">
+            <option value="0" <?php if($_REQUEST['t']=="0"){echo 'selected';}?>>CPU y Note</option>
+            <option value="1" <?php if($_REQUEST['t']=="1"){echo 'selected';}?>>Comp. y otros</option>
+            <option value="2" <?php if($_REQUEST['t']=="2"){echo 'selected';}?>>Todos</option>
+            </select>
+            </div>
 						<div class="col-md-6">
 						<input type="checkbox" name="fechas" id="fechas" value="1" <?php if(isset($_REQUEST['fechas'])){ echo 'checked';}?>>Filtro de Fechas<br>
 						 <span>Desde </span>
-						<input type="text" name="desde" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="desde" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['desde'];}?>">
+						<input type="text" class="form-control" style="width:30%;display:inline-block;" name="desde" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="desde" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['desde'];}?>">
 						
 						 <span>Hasta </span>
-						<input type="text" name="hasta" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="hasta" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['hasta'];}?>">
+						<input type="text" class="form-control" style="width:30%;display:inline-block;"  name="hasta" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="hasta" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['hasta'];}?>">
 						</select>
 						</div>
 						<div class="col-md-2">
-						
+						<br>
 						<input type="submit" class="btn btn-primary" value="Filtrar">
 						</div>
 						</form>
+            <p>&nbsp;</p>
                     </div>
 					<p>&nbsp;</p>
 					<hr>
@@ -89,20 +98,30 @@
 	//hacer la consulta
 	$filtro="";
 	
-	if(isset($_REQUEST['fechas'])){
-		
-		$filtro=" and (fechaingreso>='".$_REQUEST['desde']." 00:00:00' and fechaingreso<='".$_REQUEST['hasta']." 23:59:59')";
-		
-	}
-	if($_REQUEST['v']=="0") //todas
+
+	if($_REQUEST['v']=="0") //cerradas
 	{
-		$sql="select top 200 ordenservicio.*,clientes.clirazonsocial from ordenservicio inner join clientes on clientes.clicodigo=ordenservicio.idcliente where (estado='CERRADA' or estado='FACTURADO') ".$filtro." order by idorden desc ";
+		$filtro=" (estado='CERRADA' or estado='FACTURADO') ";
 	}
 	
 	if($_REQUEST['v']=="1") //abiertas
 	{
-		$sql="select ordenservicio.*,clientes.clirazonsocial from ordenservicio inner join clientes on clientes.clicodigo=ordenservicio.idcliente where (estado='ABIERTO' or estado='TRABAJANDO') ".$filtro." order by idorden desc";
+		$filtro=" (estado='ABIERTO' or estado='TRABAJANDO') ";
 	}
+
+    if(isset($_REQUEST['fechas'])){
+    
+    $filtro.=" and (fechaingreso>='".$_REQUEST['desde']." 00:00:00' and fechaingreso<='".$_REQUEST['hasta']." 23:59:59')";
+    
+  }
+
+  switch($_REQUEST['t']) 
+  {
+    case '0': $filtro.=" and (tipo='CPU' or tipo='NOTE') "; break;
+    case '1': $filtro.=" and (tipo<>'CPU' and tipo<>'NOTE') "; break;
+  }
+
+  $sql="select top 200 ordenservicio.*,clientes.clirazonsocial from ordenservicio inner join clientes on clientes.clicodigo=ordenservicio.idcliente where ".$filtro." order by idorden desc";
 	//echo $sql;
 	  $stmt = sqlsrv_query( $conn, $sql );
 if( $stmt === false) {
@@ -125,8 +144,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 if(($row['estado']=="CERRADA")||($row['estado']=="FACTURADO"))
 {
 	echo date_format($row['fechafin'],'d-m-Y');
-}
-else
+}else
 {
 	echo '--';
 }
@@ -134,7 +152,10 @@ else
 echo '</td>';
 if(($row['estado']=="CERRADA")||($row['estado']=="FACTURADO"))
 {
-	echo '<td>'.date_format($row['fechaaprox'],'d-m-Y').'</td>';
+echo '<td>'.date_format($row['fechaaprox'],'d-m-Y').'</td>';
+//ESTADO
+if($row["total"]==0){echo '<td class="pendiente" style="background:#a94442;color:#ffffff">'.$row['estado'].'</td>';}
+  else{echo '<td>'.$row['estado'].'</td>';}
 }
 else
 {
@@ -147,11 +168,14 @@ if(($diff->format('%R%a')==-1)||($diff->format('%a')==0))
 }
 else{
 	echo '<td>'.date_format($row['fechaaprox'],'d-m-Y').'</td>';
+ 
 }
+ echo '<td>'.$row['estado'].'</td>';
 }
-  
-  echo '<td>'.$row['estado'].'</td>
- ';
+ 
+
+
+
   
 
   echo '<td><div class="btn-group">
@@ -225,6 +249,11 @@ $(function() {
             responsive: true,
 			order: [[ 9, 'asc' ], [ 0, 'desc' ]]
         });
+
+        if(getParameterByName("q"))
+        {
+          $('#dataTables-example').DataTable().search(getParameterByName("q")).draw();
+        }
     });
 	
 	$( function() {
@@ -247,6 +276,17 @@ $(function() {
    });
    
     $(".pendiente").effect("pulsate", { times:3 }, 2000);
+
+
+    function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 </script>
 
 </body>

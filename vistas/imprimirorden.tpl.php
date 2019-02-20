@@ -44,7 +44,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 	$pieCerradoSinCosto=$row['textocierre2'];
 }
 ?>
-<a id="btn1" href="inicio.php">Ir al Inicio</a>
+<a id="btn1" href="listaordenes.php?v=1&t=2">Ir al Inicio</a>
 <a id="btn2" href="#" onclick="impresion();">Imprimir</a>
 <div class="book">
 <div class="page">
@@ -123,15 +123,40 @@ echo '<div class="row" style="height:34%;overflow:hidden;margin-top:10px;"><div 
                                     <thead>
                                         <tr>
                                             <th style="width:10%;text-align:left;">Cod.</th>
-                                            <th style="width:69%;text-align:left;">Descripcion</th>
+                                            <th style="width:49%;text-align:left;">Descripcion</th>
                                             <th style="width:20%;text-align:right;">P.U.</th>
+                                            <th style="width:10%;text-align:right;">Cant.</th>
+                                            <th style="width:20%;text-align:right;">S. Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="grilla">
                                          <?php
 										 $contador=0;
 										 $total=0;
-					   $sql2 = "select * from detalleoservicio where idorden=".$_REQUEST['id'];
+
+$sql2 =  "select * from detalleoservicio where idproducto=10220 and idorden=".$_REQUEST['id'];
+$stmt3 = sqlsrv_query( $conn, $sql2 );
+$rows = sqlsrv_has_rows( $stmt3 );
+if($rows===false)
+{
+	$sql2 = "select ProDescripcion,productolista.Importe  from productos inner join ProductoLista on productolista.IdProducto =productos.procodigo where ProCodigo=10220 and IdLista=1";
+
+$stmt2 = sqlsrv_query( $conn, $sql2 );
+while( $row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
+	$prodescripcionCero=$row2["ProDescripcion"];
+	$proprecioCero=$row2['Importe'];
+}
+ echo '<tr>
+	 
+	  <td style="text-align:left;">
+	  <span>10220</span></td> 
+	  <td style="text-align:left;">
+	  <span>'.$prodescripcionCero.'</span></td> 
+	  <td style="text-align:right;"> <span>'.$proprecioCero.'</span></td> 
+	  <td style="text-align:right;"> <span>1</span></td>
+	  <td style="text-align:right;"> <span>'.$proprecioCero.'</span></td></tr>';
+
+  $sql2 = "select * from detalleoservicio where idorden=".$_REQUEST['id'];
 $stmt2 = sqlsrv_query( $conn, $sql2 );
 if( $stmt2 === false) {
     die( print_r( sqlsrv_errors(), true) );
@@ -144,9 +169,41 @@ while( $row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
 	  <span>'.$row2['idproducto'].'</span></td> 
 	  <td style="text-align:left;">
 	  <span>'.$row2['prodescripcion'].'</span></td> 
-	  <td style="text-align:right;"> <span>'.$row2['preciounitario'].'</span></td> </tr>';
+	  <td style="text-align:right;"> <span>'.$row2['preciounitario'].'</span></td> 
+	  <td style="text-align:right;"> <span>'.$row2['cantidad'].'</span></td>
+	  <td style="text-align:right;"> <span>'.$row2['preciototal'].'</span></td></tr>';
 	  }
 
+	   echo '<tr>
+	 
+	  <td style="text-align:left;">
+	  <span>10220</span></td> 
+	  <td style="text-align:left;">
+	  <span>BONIFICACION '.$prodescripcionCero.'</span></td> 
+	  <td style="text-align:right;"> <span>-'.$proprecioCero.'</span></td> 
+	  <td style="text-align:right;"> <span>1</span></td>
+	  <td style="text-align:right;"> <span>-'.$proprecioCero.'</span></td></tr>';
+}
+else
+{
+	 $sql2 = "select * from detalleoservicio where idorden=".$_REQUEST['id'];
+$stmt2 = sqlsrv_query( $conn, $sql2 );
+if( $stmt2 === false) {
+    die( print_r( sqlsrv_errors(), true) );
+}
+
+while( $row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
+      echo '<tr>
+	 
+	  <td style="text-align:left;">
+	  <span>'.$row2['idproducto'].'</span></td> 
+	  <td style="text-align:left;">
+	  <span>'.$row2['prodescripcion'].'</span></td> 
+	  <td style="text-align:right;"> <span>'.$row2['preciounitario'].'</span></td> 
+	  <td style="text-align:right;"> <span>'.$row2['cantidad'].'</span></td>
+	  <td style="text-align:right;"> <span>'.$row2['preciototal'].'</span></td></tr>';
+	  }
+}
 sqlsrv_free_stmt( $stmt2);
 					   ?>
                                     </tbody>
@@ -239,15 +296,41 @@ echo '<div class="row" style="height:17%;overflow:hidden;margin-top:10px">';
                                     <thead>
                                         <tr>
                                             <th style="width:10%;text-align:left;">Cod.</th>
-                                            <th style="width:69%;text-align:left;">Descripcion</th>
+                                            <th style="width:49%;text-align:left;">Descripcion</th>
                                             <th style="width:20%;text-align:right;">P.U.</th>
+                                            <th style="width:10%;text-align:right;">Cant.</th>
+                                            <th style="width:20%;text-align:right;">S. Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="grilla">
                                          <?php
 										 $contador=0;
 										 $total=0;
-					   $sql2 = "select * from detalleoservicio where idorden=".$_REQUEST['id'];
+$sql2 =  "select * from detalleoservicio where idproducto=10220 and idorden=".$_REQUEST['id'];
+$stmt3 = sqlsrv_query( $conn, $sql2 );
+$rows = sqlsrv_has_rows( $stmt3 );
+
+
+if($rows === false)
+{
+	$sql2 = "select ProDescripcion,productolista.Importe  from productos inner join ProductoLista on productolista.IdProducto =productos.procodigo where ProCodigo=10220 and IdLista=1";
+
+$stmt2 = sqlsrv_query( $conn, $sql2 );
+while( $row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
+	$prodescripcionCero=$row2["ProDescripcion"];
+	$proprecioCero=$row2['Importe'];
+}
+ echo '<tr>
+	 
+	  <td style="text-align:left;">
+	  <span>10220</span></td> 
+	  <td style="text-align:left;">
+	  <span>'.$prodescripcionCero.'</span></td> 
+	  <td style="text-align:right;"> <span>'.$proprecioCero.'</span></td> 
+	  <td style="text-align:right;"> <span>1</span></td>
+	  <td style="text-align:right;"> <span>'.$proprecioCero.'</span></td></tr>';
+
+  $sql2 = "select * from detalleoservicio where idorden=".$_REQUEST['id'];
 $stmt2 = sqlsrv_query( $conn, $sql2 );
 if( $stmt2 === false) {
     die( print_r( sqlsrv_errors(), true) );
@@ -260,9 +343,41 @@ while( $row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
 	  <span>'.$row2['idproducto'].'</span></td> 
 	  <td style="text-align:left;">
 	  <span>'.$row2['prodescripcion'].'</span></td> 
-	  <td style="text-align:right;"> <span>'.$row2['preciounitario'].'</span></td> </tr>';
+	  <td style="text-align:right;"> <span>'.$row2['preciounitario'].'</span></td> 
+	  <td style="text-align:right;"> <span>'.$row2['cantidad'].'</span></td>
+	  <td style="text-align:right;"> <span>'.$row2['preciototal'].'</span></td></tr>';
 	  }
 
+	   echo '<tr>
+	 
+	  <td style="text-align:left;">
+	  <span>10220</span></td> 
+	  <td style="text-align:left;">
+	  <span>BONIFICACION '.$prodescripcionCero.'</span></td> 
+	  <td style="text-align:right;"> <span>-'.$proprecioCero.'</span></td> 
+	  <td style="text-align:right;"> <span>1</span></td>
+	  <td style="text-align:right;"> <span>-'.$proprecioCero.'</span></td></tr>';
+}
+else
+{
+	 $sql2 = "select * from detalleoservicio where idorden=".$_REQUEST['id'];
+$stmt2 = sqlsrv_query( $conn, $sql2 );
+if( $stmt2 === false) {
+    die( print_r( sqlsrv_errors(), true) );
+}
+
+while( $row2 = sqlsrv_fetch_array( $stmt2, SQLSRV_FETCH_ASSOC) ) {
+      echo '<tr>
+	 
+	  <td style="text-align:left;">
+	  <span>'.$row2['idproducto'].'</span></td> 
+	  <td style="text-align:left;">
+	  <span>'.$row2['prodescripcion'].'</span></td> 
+	  <td style="text-align:right;"> <span>'.$row2['preciounitario'].'</span></td> 
+	  <td style="text-align:right;"> <span>'.$row2['cantidad'].'</span></td>
+	  <td style="text-align:right;"> <span>'.$row2['preciototal'].'</span></td></tr>';
+	  }
+}
 sqlsrv_free_stmt( $stmt2);
 					   ?>
                                     </tbody>

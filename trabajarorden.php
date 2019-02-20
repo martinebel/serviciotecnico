@@ -48,17 +48,26 @@ if (isset($_POST['procodigo']))
 		array_push($precioarray,$aux);
 	}
 
+	//cantidad
+	$cants=$_POST['cant'];
+	$cantarray=array();
+	foreach($cants as $aux)
+	{
+		array_push($cantarray,$aux);
+	}
+
 
 //insertar nuevos datos del detalle
 $i=0;
 foreach($codigoarray as $key)
 {
-$sql = "insert into detalleoservicio (idorden,idproducto,prodescripcion,cantidad,preciounitario,preciototal,esgarantia) values(".$idorden.",".$key.",'".$nombrearray[$i]."',1,'".$precioarray[$i]."','".$precioarray[$i]."',0)";
+$sql = "insert into detalleoservicio (idorden,idproducto,prodescripcion,cantidad,preciounitario,preciototal,esgarantia) values(".$idorden.",".$key.",'".$nombrearray[$i]."','".$cantarray[$i]."','".$precioarray[$i]."','".($precioarray[$i]*$cantarray[$i])."',0)";
 $stmt = sqlsrv_query( $conn, $sql );
 $i++;
 }
 }
-if (isset($_REQUEST['id'])){$idorden=$_REQUEST['id'];}
-include 'vistas/trabajarorden.tpl.php';
+if (isset($_POST['idorden'])){header('Location: listaordenes.php?v=1&t=2');exit();}
+if (isset($_REQUEST['id'])){$idorden=$_REQUEST['id'];include 'vistas/trabajarorden.tpl.php';}
+
 ?>
 

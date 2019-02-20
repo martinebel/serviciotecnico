@@ -55,6 +55,8 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 }
 
 
+
+
 $query="SELECT top 10 * from clientes where clirazonsocial like '%".$name."%'";
  $stmt = sqlsrv_query( $conn, $query );
 if( $stmt === false) {
@@ -82,6 +84,52 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
   
 }
 
+if(isset($_REQUEST['factura']))
+{
+  $html="";
+  $return = array();
+    $json = "[";
+    $first = true;
+  $query="SELECT * from ventas where facid='".$_REQUEST['numero']."' and clicodigo=".$_REQUEST['idcliente'];
+  //echo $query;
+ $stmt = sqlsrv_query( $conn, $query );
+if( $stmt === false) {
+    die( print_r( sqlsrv_errors(), true) );
+}
+$rows = sqlsrv_has_rows( $stmt );
+if($rows===true)
+{
+while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                
+
+
+      if(!$first){
+            $json .=  ",";
+        }else{
+            $first = false;
+        }
+
+        $json .= '{"msg":"OK"}';
+  
+     }
+   }
+   else
+   {
+    if(!$first){
+            $json .=  ",";
+        }else{
+            $first = false;
+        }
+
+        $json .= '{"msg":"ERROR"}';
+   }
+
+
+    $json .= "]";
+
+    echo $json;
+    exit();
+}
 
 
 //consulta de datos de cliente

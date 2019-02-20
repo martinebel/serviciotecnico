@@ -43,10 +43,10 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 </head>
 
 <body>
+ <?php include 'sidebar.php';?>
+    <div id="wrapper" class="">
 
-    <div id="wrapper" class="toggled">
-
-       <?php include 'sidebar.php';?>
+      
 
         <!-- Page Content -->
         <div id="page-content-wrapper">

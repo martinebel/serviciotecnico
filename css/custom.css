@@ -22,14 +22,8 @@
     padding-left: 250px;
 }
 
-#sidebar-wrapper {
-    z-index: 1000;
-    position: fixed;
-    left: 250px;
-    width: 0;
-    height: 100%;
-    margin-left: -250px;
-    overflow-y: auto;
+.navbar-default {
+   
     background: #d61c38;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -68,21 +62,21 @@
     line-height: 40px;
 }
 
-.sidebar-nav  .active{
+.navbar-nav .active{
 	background:#999;
 }
 
-.sidebar-nav  .active a{
+.navbar-nav .active a{
 	color:#fff;
 }
 
-.sidebar-nav li a {
+.navbar-default .navbar-nav>li>a {
     display: block;
     text-decoration: none;
     color: #FFF;
 }
 
-.sidebar-nav li a:hover {
+.navbar-default .navbar-nav>li>a:hover {
     text-decoration: none;
     color: #fff;
     background: rgba(255,255,255,0.2);
@@ -108,6 +102,12 @@
     background: none;
 }
 
+.navbar-brand img
+{
+        width: 115px;
+    margin-top: -6px;
+}
+
 @media(min-width:768px) {
     #wrapper {
         padding-left: 0;
@@ -127,6 +127,7 @@
 
     #page-content-wrapper {
         padding: 20px;
+        padding-top:55px;
         position: relative;
     }
 
