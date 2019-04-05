@@ -110,7 +110,7 @@
 
 	if($_REQUEST['v']=="1") //abiertas
 	{
-		$filtro=" (estado='ABIERTO' or estado='TRABAJANDO') ";
+		$filtro=" (estado='ABIERTO' or estado='TRABAJANDO' or estado='EN ESPERA') ";
 	}
 
     if(isset($_REQUEST['fechas'])){

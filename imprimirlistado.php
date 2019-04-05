@@ -49,7 +49,7 @@ require 'db.php';
   echo '<hr>';
    ?>
   <div class="table-responsive ">
-<table class="table table-striped" id="dataTables-example">
+<table class="table table-striped " id="dataTables-example">
 <thead>
 <tr>
   <th>#</th>
@@ -74,7 +74,7 @@ if($_REQUEST['v']=="0") //cerradas
 
 if($_REQUEST['v']=="1") //abiertas
 {
-  $filtro=" (estado='ABIERTO' or estado='TRABAJANDO') ";
+  $filtro=" (estado='ABIERTO' or estado='TRABAJANDO' or estado='EN ESPERA') ";
 }
 
   if(isset($_REQUEST['fechas'])){

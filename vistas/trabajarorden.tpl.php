@@ -31,15 +31,15 @@
  <?php include 'sidebar.php';?>
     <div id="wrapper" class="">
 
-      
+
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-		
+
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12 col-xs-12">
-                      
+
 					   <?php
 					   $sql = "select ordenservicio.*,clientes.clirazonsocial,clientes.clitelefono from ordenservicio inner join clientes on clientes.clicodigo=ordenservicio.idcliente where idorden=".$idorden;
 $stmt = sqlsrv_query( $conn, $sql );
@@ -72,22 +72,24 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 }
  echo ' </div></div>';
 $motivocierre=$row['motivocierre'];
+$estado=$row['estado'];
 	  }
 
 sqlsrv_free_stmt( $stmt);
 					   ?>
-					  
+
                     </div>
 				<div class="col-md-12">
           <ul class="nav nav-tabs">
            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Productos</a></li>
     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Tareas</a></li>
+    <li role="presentation"><a href="#espera" aria-controls="espera" role="tab" data-toggle="tab"><?php if($estado=="EN ESPERA"){echo "Pasar a Normal";}else{echo "Pasar a Espera";}?></a></li>
   </ul>
    <form action="trabajarorden.php" method="post">
    <div class="tab-content">
-    
+
     <div role="tabpanel" class="tab-pane active" id="home">
-     
+
        <div class="col-md-12">
           <div class="form-group">
           <label for="producto">Agregar Productos</label>
@@ -100,7 +102,7 @@ sqlsrv_free_stmt( $stmt);
                       <th style="width:5%"></th>
                                             <th style="width:10%">Cod.</th>
                                             <th style="width:54%">Descripcion</th>
-                                            
+
                                             <th style="width:10%">P.U.</th>
                                             <th style="width:10%">Cant.</th>
                                             <th style="width:10%">SubTot.</th>
@@ -119,11 +121,11 @@ if( $stmt === false) {
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
       echo '<tr id="fila'.$contador.'">
     <td><a href="#" onclick="eliminarFila('.$contador.');" class="btn btn-primary">
-    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td> 
+    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
     <td><input type="hidden" name="procodigo[]" class="form-control" value="'.$row['idproducto'].'" readonly>
-    <span>'.$row['idproducto'].'</span></td> 
+    <span>'.$row['idproducto'].'</span></td>
     <td><input type="hidden" name="prodescripcion[]" class="form-control" value="'.$row['prodescripcion'].'" readonly>
-    <span>'.$row['prodescripcion'].'</span></td> 
+    <span>'.$row['prodescripcion'].'</span></td>
     <td><input type="text" name="pu[]" class="form-control pu" value="'.$row['preciounitario'].'"></td>
     <td><input type="text" name="cant[]" class="form-control pu" value="'.$row['cantidad'].'"></td>
     <td><input type="text" name="st[]" class="form-control pu" id="st'.$contador.'" value="'.$row['preciototal'].'"  readonly></td></tr>';
@@ -141,28 +143,28 @@ sqlsrv_free_stmt( $stmt);
                          <div class="col-md-6 pull-right" style="text-align:right">
  <span style="display:inline-table"><strong>TOTAL $</strong></span><input type="text" class="form-control"  style="display:inline-table;width:40%" name="total" id="total" value="<?php echo $total;?>" readonly>
  </div>
- 
-    
+
+
     </div>
 
     <div role="tabpanel" class="tab-pane" id="profile">
-      
+
       <div class="col-md-12">
-          
+
                         <div class="form-group">
           <label for="exampleTextarea">Agregar Tarea</label>
           <input type="text" name="motivocierre" class="form-control">
-          
+
           </div>
           </div>
-          
+
           <div class="col-md-12">
-          
+
           <div class="table-responsive table-bordered">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                      
+
                                             <th style="width:20%">Fecha</th>
                                             <th style="width:20%">Vendedor</th>
                                             <th style="width:60%">Informe</th>
@@ -177,11 +179,11 @@ if( $stmt === false) {
 }
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-      echo '<tr> 
+      echo '<tr>
     <td>
-    <span>'.date_format($row['fecha'],'d-m-Y h:i:s').'</span></td> 
+    <span>'.date_format($row['fecha'],'d-m-Y h:i:s').'</span></td>
     <td>
-    <span>'.$row['vendnombre'].'</span></td> 
+    <span>'.$row['vendnombre'].'</span></td>
     <td>  <span>'.$row['informe'].'</span></td></tr>';
 
     }
@@ -190,19 +192,49 @@ sqlsrv_free_stmt( $stmt);
              ?>
                                     </tbody>
                                 </table>
-                
+
                             </div>
 
-          </div>  
+          </div>
     </div>
-   
+  <div role="tabpanel" class="tab-pane" id="espera">
+    <?php
+    if($estado=="EN ESPERA")
+    {
+      echo '<div class="col-md-6">
+      <p>Indique el motivo de la SALIDA de la espera</p>
+      <input type="text" id="motivoespera" class="form-control">
+      </div>
+      <div class="col-md-6">
+      <p>&nbsp;</p>
+      <a href="#" id="salirespera" class="btn btn-warning">Salir de Espera</a>
+      </div>';
+    }
+    else
+    {
+      echo '<div class="col-md-6">
+      <p>Indique el motivo de la ENTRADA de la espera</p>
+      <input type="text" id="motivoespera" class="form-control">
+      </div>
+      <div class="col-md-6">
+      <p>&nbsp;</p>
+      <a href="#" id="entrarespera" class="btn btn-warning">Entrar a Espera</a>
+      </div>';
+    }
+    ?>
+    <br><p>&nbsp;</p>
+  </div>
    </div>
    <br><p>&nbsp;</p>
+
   <input type="submit" value="Guardar Orden" class="btn btn-default">
             <a href="inicio.php" class="btn btn-default">Salir</a>
-            <input type="hidden" name="idorden" value="<?php echo $idorden;?>">
+
+            <input type="hidden" name="idorden" id="idorden" value="<?php echo $idorden;?>">
     </form>
+
 </div>
+
                 </div>
             </div>
         </div>
@@ -231,8 +263,8 @@ $(document).ready(function() {
 });
 //BUSQUEDA DE PRODUCTOS---------------------------------------------------------
 $(function() {
-  
- 
+
+
     $( "#producto" ).autocomplete({
       source: "ajax_search.php?tipo=producto",
       minLength: 2,
@@ -246,15 +278,15 @@ $(function() {
   });
 
   function loadProd(codigo, nombre,precio ) {
-    
+
   $("#grilla").append('<tr id="fila'+contador+'"><td><a href="#" onclick="eliminarFila('+contador+');" class="btn btn-primary"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td> <td><input type="hidden" name="procodigo[]" class="form-control" value="'+codigo+'" readonly><span>'+codigo+'</span></td> <td><input type="hidden" name="prodescripcion[]" class="form-control" value="'+nombre+'" readonly><span>'+nombre+'</span></td> <td><input type="text" name="pu[]" class="form-control pu" readonly value="'+parseFloat(precio).toFixed(2)+'"></td><td><input type="text" name="cant[]" class="form-control pu" value="1"></td><td><input type="text" name="st[]" class="form-control pu" id="st'+contador+'" value="'+parseFloat(precio).toFixed(2)+'"  readonly></td></tr>');
 contador++;
 calcularTotal();
 
 
     }
-  
-  
+
+
     //CALCULO DE TOTAL DE FACTURA
   function calcularTotal()
   {
@@ -274,7 +306,7 @@ sumatoria+=(parseFloat(p.value)*parseFloat(c.value));
 
 
   }
- $("#total").val(sumatoria.toFixed(2)); 
+ $("#total").val(sumatoria.toFixed(2));
   }
 
   function eliminarFila(fila)
@@ -286,14 +318,21 @@ sumatoria+=(parseFloat(p.value)*parseFloat(c.value));
   $(document).on('change', '.pu', function() { calcularTotal(); });
 
   //$('.pu').on( "change",function(){console.log("change");   calcularTotal(); });
-   
-	$(document).on('keydown', '.pu', function() { 
+
+	$(document).on('keydown', '.pu', function() {
     if(event.keyCode == 13) {
       event.preventDefault();
     calcularTotal();
 }
   });
 
+  $(document).on('click', '#entrarespera', function() {
+  window.location.href="trabajarorden.php?action=entrarespera&motivo="+$("#motivoespera").val()+"&idorden="+$("#idorden").val()
+  });
+
+  $(document).on('click', '#salirespera', function() {
+  window.location.href="trabajarorden.php?action=salirespera&motivo="+$("#motivoespera").val()+"&idorden="+$("#idorden").val()
+  });
 
 	    /* $('.pu').on( "keydown", function(events){
     if(event.keyCode == 13) {
@@ -306,4 +345,3 @@ sumatoria+=(parseFloat(p.value)*parseFloat(c.value));
 </script>
 </body>
 </html>
-
