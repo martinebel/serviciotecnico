@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require 'db.php';
 //require_once('email.php');
 
@@ -68,7 +68,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 //sendMail($email,$razonsocial,"Orden de Servicio ".$idorden,"<h3>Hola <strong>".$razonsocial."</strong></h3><p>Hemos recibido su equipo con la <strong>Orden de Servicio n°".$idorden.". </strong></p><p>Nuestro servicio técnico se comunicará con usted tan pronto como sea posible.</p><p></p><p>RyR Computacion</p><p><a href='http://ryrcomputacion.com' target='_blank'>www.ryrcomputacion.com</a></p>");
 //imprimir etiquetas y luego ir a la impresion de la orden
 //$output = exec('C:\\Sistema\\ZPLPrinter.exe '.$idorden.' "'.$razonsocial.'"'); 
-pclose(popen('start /b C:\\Sistema\\ZPLPrinter.exe '.$idorden.' "'.$razonsocial.'"','r'));
+pclose(popen('start /b C:\\Sistema\\ZPLPrinter2.exe '.$idorden.' "'.$razonsocial.'"','r'));
 
 	header("Location: imprimirorden.php?id=".$idorden);
 }
