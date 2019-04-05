@@ -32,10 +32,10 @@
 
     <div id="wrapper" class="">
 
-      
+
         <!-- Page Content -->
         <div id="page-content-wrapper">
-		
+
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12" style="background-color: #e3e3e3;">
@@ -56,11 +56,11 @@
             <option value="2" <?php if($_REQUEST['t']=="2"){echo 'selected';}?>>Todos</option>
             </select>
             </div>
-						<div class="col-md-6">
+						<div class="col-md-4">
 						<input type="checkbox" name="fechas" id="fechas" value="1" <?php if(isset($_REQUEST['fechas'])){ echo 'checked';}?>>Filtro de Fechas<br>
 						 <span>Desde </span>
 						<input type="text" class="form-control" style="width:30%;display:inline-block;" name="desde" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="desde" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['desde'];}?>">
-						
+
 						 <span>Hasta </span>
 						<input type="text" class="form-control" style="width:30%;display:inline-block;"  name="hasta" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="hasta" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['hasta'];}?>">
 						</select>
@@ -69,6 +69,10 @@
 						<br>
 						<input type="submit" class="btn btn-primary" value="Filtrar">
 						</div>
+            <div class="col-md-2">
+            <br>
+            <a href="imprimirlistado.php?v=<?php echo $_REQUEST['v'].'&t='.$_REQUEST['t'].(isset($_REQUEST['fechas'])?'&fechas='.$_REQUEST['fechas'].'&desde='.$_REQUEST['desde'].'&hasta='.$_REQUEST['hasta']:'');?>" target="_blank" class="btn btn-default" >Imprimir Listado</a>
+            </div>
 						</form>
             <p>&nbsp;</p>
                     </div>
@@ -88,8 +92,8 @@
 		<th>Estado</th>
 		<th>Acciones</th>
 		<th>Prioridad</th>
-		
-		
+
+
 		<th style="display:none">Prioridad</th>
       </tr>
     </thead>
@@ -97,25 +101,25 @@
     <?php
 	//hacer la consulta
 	$filtro="";
-	
+
 
 	if($_REQUEST['v']=="0") //cerradas
 	{
 		$filtro=" (estado='CERRADA' or estado='FACTURADO') ";
 	}
-	
+
 	if($_REQUEST['v']=="1") //abiertas
 	{
 		$filtro=" (estado='ABIERTO' or estado='TRABAJANDO') ";
 	}
 
     if(isset($_REQUEST['fechas'])){
-    
+
     $filtro.=" and (fechaingreso>='".$_REQUEST['desde']." 00:00:00' and fechaingreso<='".$_REQUEST['hasta']." 23:59:59')";
-    
+
   }
 
-  switch($_REQUEST['t']) 
+  switch($_REQUEST['t'])
   {
     case '0': $filtro.=" and (tipo='CPU' or tipo='NOTE') "; break;
     case '1': $filtro.=" and (tipo<>'CPU' and tipo<>'NOTE') "; break;
@@ -126,7 +130,7 @@
 	  $stmt = sqlsrv_query( $conn, $sql );
 if( $stmt === false) {
     die( print_r( sqlsrv_errors(), true) );
-}	  
+}
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
    switch($row['prioridad'])
  {
@@ -134,7 +138,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
  case "2": echo '<tr style="background:#fcf8e3;color:#8a6d3b">';break;
  case "3": echo '<tr style="background:#dff0d8;color:#3c763d">';break;
  }
-  
+
   echo '
   <td>'.$row['idorden'].'</td>
   <td>'.substr($row['clirazonsocial'],0,25).'</td>
@@ -168,15 +172,15 @@ if(($diff->format('%R%a')==-1)||($diff->format('%a')==0))
 }
 else{
 	echo '<td>'.date_format($row['fechaaprox'],'d-m-Y').'</td>';
- 
+
 }
  echo '<td>'.$row['estado'].'</td>';
 }
- 
 
 
 
-  
+
+
 
   echo '<td><div class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -201,7 +205,7 @@ echo ' <li><a href="cerrarorden.php?id='.$row['idorden'].'" title="Cerrar Orden"
 	<li role="separator" class="divider"></li>
 	<li><a href="verdetalles.php?id='.$row['idorden'].'" title="Ver Detalles">Ver Detalles</a></li>
   </ul>
-</div> </td> 
+</div> </td>
  <td>';
   switch($row['prioridad'])
  {
@@ -236,7 +240,7 @@ echo ' <li><a href="cerrarorden.php?id='.$row['idorden'].'" title="Cerrar Orden"
     <script src="datatables/js/jquery.dataTables.min.js"></script>
     <script src="datatables-plugins/dataTables.bootstrap.min.js"></script>
     <script src="datatables-responsive/dataTables.responsive.js"></script>
-	
+
 <script>
 $(function() {
     $('#filtro').change(function() {
@@ -255,16 +259,16 @@ $(function() {
           $('#dataTables-example').DataTable().search(getParameterByName("q")).draw();
         }
     });
-	
+
 	$( function() {
     $( "#desde" ).datepicker( {dateFormat: 'yy-mm-dd' } );
 	$( "#hasta" ).datepicker( {dateFormat: 'yy-mm-dd' } );
   } );
-  
-  
-   $('#fechas').on('change', function() { 
+
+
+   $('#fechas').on('change', function() {
         if($(this).is(":checked")) {
-           
+
             $("#desde").attr("required", "required");
 			 $("#hasta").attr("required", "required");
         }
@@ -274,7 +278,7 @@ $(function() {
 			    $("#hasta").removeAttr("required");
 		}
    });
-   
+
     $(".pendiente").effect("pulsate", { times:3 }, 2000);
 
 
