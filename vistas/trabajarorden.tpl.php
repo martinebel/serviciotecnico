@@ -83,7 +83,7 @@ sqlsrv_free_stmt( $stmt);
           <ul class="nav nav-tabs">
            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Productos</a></li>
     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Tareas</a></li>
-    <li role="presentation"><a href="#espera" aria-controls="espera" role="tab" data-toggle="tab"><?php if($estado=="EN ESPERA"){echo "Pasar a Normal";}else{echo "Pasar a Espera";}?></a></li>
+    <li role="presentation"><a href="#espera" aria-controls="espera" role="tab" data-toggle="tab"><?php if($estado=="EN ESPERA"){echo "Salir de Espera";}else{echo "Pasar a Espera";}?></a></li>
   </ul>
    <form action="trabajarorden.php" method="post">
    <div class="tab-content">
