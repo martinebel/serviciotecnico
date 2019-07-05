@@ -43,8 +43,8 @@ sqlsrv_query($conn, $sql);
 
 
 	//guardar orden de servicio
-$sql = "insert into ordenservicio (idcliente,fechaingreso,motivoingreso,tipo,marca,serie,prioridad,hacerbackup,cargador,recibio,fechafin,motivocierre,cerro,total,estado,fechaaprox,garantia)
-		VALUES (".$idcliente.",GETDATE(),'".$motivoingreso."','".$tipo."','".$marca."','".$serie."','".$prioridad."',".$backup.",".$cargador.",".$idvendedor.",NULL,'',NULL,0,'ABIERTO','".date_format($fechaaprox, 'Y-m-d')."',".$garantia."); SELECT SCOPE_IDENTITY()";
+$sql = "insert into ordenservicio (idcliente,fechaingreso,motivoingreso,tipo,marca,serie,prioridad,hacerbackup,cargador,recibio,fechafin,motivocierre,cerro,total,estado,fechaaprox,garantia,fechafact)
+		VALUES (".$idcliente.",GETDATE(),'".$motivoingreso."','".$tipo."','".$marca."','".$serie."','".$prioridad."',".$backup.",".$cargador.",".$idvendedor.",NULL,'',NULL,0,'ABIERTO','".date_format($fechaaprox, 'Y-m-d')."',".$garantia.",null); SELECT SCOPE_IDENTITY()";
 $resource=sqlsrv_query($conn, $sql);
 if( $resource === false) {
     die( print_r( sqlsrv_errors(), true) );

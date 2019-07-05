@@ -71,7 +71,12 @@
 						</div>
             <div class="col-md-2">
             <br>
-            <a href="imprimirlistado.php?v=<?php echo $_REQUEST['v'].'&t='.$_REQUEST['t'].(isset($_REQUEST['fechas'])?'&fechas='.$_REQUEST['fechas'].'&desde='.$_REQUEST['desde'].'&hasta='.$_REQUEST['hasta']:'');?>" target="_blank" class="btn btn-default" >Imprimir Listado</a>
+            <?php
+            if($_SESSION['tipousuario']=="1")
+            {
+                echo '<a href="imprimirlistado.php?v='.$_REQUEST['v'].'&t='.$_REQUEST['t'].(isset($_REQUEST['fechas'])?'&fechas='.$_REQUEST['fechas'].'&desde='.$_REQUEST['desde'].'&hasta='.$_REQUEST['hasta']:'').'" target="_blank" class="btn btn-default" >Imprimir Listado</a>';
+            }
+            ?>
             </div>
 						</form>
             <p>&nbsp;</p>
