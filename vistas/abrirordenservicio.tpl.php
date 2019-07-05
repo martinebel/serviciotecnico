@@ -47,7 +47,7 @@
                         <legend>Abrir Orden de Servicio</legend>
 
 
-	<form action="abrirordenservicio.php" method="post">
+	<form action="abrirordenservicio.php" method="post" id="formularioOrden">
 	<!--PASO 1-->
 	<div class="row" id="paso1">
 				<div class="col-md-12  col-xs-12">
@@ -91,6 +91,8 @@
 						<select class="form-control" name="tipo" id="tipo">
 						<option value="CPU">CPU</option>
 						<option value="NOTE">Notebook</option>
+            <option value="AIO">AIO</option>
+            <option value="TAB">Tablet</option>
 						<option value="MONIT">Monitor</option>
 						<option value="IMPR">Impresora</option>
 						<option value="HDD">Disco Rigido</option>
@@ -163,7 +165,7 @@
 				<div class="col-md-12">
 				<hr>
 				<a href="abrirordenservicio.php" style="float:left"  class="btn btn-default">Cancelar</a>
-				<input type="submit" style="float:right" class="btn btn-default" value="Imprimir">
+				<a href="#" style="float:right" class="btn btn-default disabled" id="btnImprimir">Imprimir</a>
 				</div>
 	</div> <!--FIN PASO 3-->
 	</form>
@@ -438,23 +440,43 @@ $( "#documento" ).on( "keypress", function(e) {
 
   if(e.which == 13) {
     e.preventDefault();
-    $.ajax({
-    url: 'ajax_documento.php?documento='+$("#documento").val(),
-    async: true,
-    contentType: "application/json",
-       success: function(data) {
-         var obj=JSON.parse(data);
-         if(obj.length>0)
-         {
-           $("#idvendedor").val(obj[0].codigo);
-           $("#divDocumento").hide();
-           $("#recibe").html('Recibe: '+obj[0].nombre);
-           $("#recibe").show();
-         }
-       }
-    });
+    if(buscarDocumento()==1){$("#btnImprimir").removeClass("disabled");}
       }
 });
+
+$( "#btnImprimir" ).on( "click", function(e) {
+
+    e.preventDefault();
+
+      $("#formularioOrden").submit();
+
+
+});
+
+function buscarDocumento()
+{
+var devolver="";
+  $.ajax({
+  url: 'ajax_documento.php?documento='+$("#documento").val(),
+  async: false,
+  contentType: "application/json",
+     success: function(data) {
+       var obj=JSON.parse(data);
+       if(obj.length>0)
+       {
+         $("#idvendedor").val(obj[0].codigo);
+         $("#divDocumento").hide();
+         $("#recibe").html('Recibe: '+obj[0].nombre);
+         $("#recibe").show();
+         devolver= 1;
+       }
+       else {
+         devolver= 0;
+       }
+     }
+  });
+  return devolver;
+}
 
 $(document).ready(function() {
 

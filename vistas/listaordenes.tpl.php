@@ -51,7 +51,7 @@
             <div class="col-md-2">
                         <span>Tipo </span>
             <select name="t"  class="form-control">
-            <option value="0" <?php if($_REQUEST['t']=="0"){echo 'selected';}?>>CPU y Note</option>
+            <option value="0" <?php if($_REQUEST['t']=="0"){echo 'selected';}?>>CPU, Note y AIO</option>
             <option value="1" <?php if($_REQUEST['t']=="1"){echo 'selected';}?>>Comp. y otros</option>
             <option value="2" <?php if($_REQUEST['t']=="2"){echo 'selected';}?>>Todos</option>
             </select>
@@ -59,10 +59,10 @@
 						<div class="col-md-4">
 						<input type="checkbox" name="fechas" id="fechas" value="1" <?php if(isset($_REQUEST['fechas'])){ echo 'checked';}?>>Filtro de Fechas<br>
 						 <span>Desde </span>
-						<input type="text" class="form-control" style="width:30%;display:inline-block;" name="desde" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="desde" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['desde'];}?>">
+						<input type="text" class="form-control" style="width:30%;display:inline-block;" name="desde" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="desde" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['desde'];}?>" autocomplete="off">
 
 						 <span>Hasta </span>
-						<input type="text" class="form-control" style="width:30%;display:inline-block;"  name="hasta" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="hasta" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['hasta'];}?>">
+						<input type="text" class="form-control" style="width:30%;display:inline-block;"  name="hasta" <?php if(isset($_REQUEST['fechas'])){ echo 'required="required"';}?> id="hasta" value="<?php if(isset($_REQUEST['fechas'])){ echo $_REQUEST['hasta'];}?>" autocomplete="off">
 						</select>
 						</div>
 						<div class="col-md-2">
@@ -126,8 +126,8 @@
 
   switch($_REQUEST['t'])
   {
-    case '0': $filtro.=" and (tipo='CPU' or tipo='NOTE') "; break;
-    case '1': $filtro.=" and (tipo<>'CPU' and tipo<>'NOTE') "; break;
+    case '0': $filtro.=" and (tipo='CPU' or tipo='NOTE' or tipo='AIO') "; break;
+    case '1': $filtro.=" and (tipo<>'CPU' and tipo<>'NOTE' and tipo <>'AIO') "; break;
   }
 
   $sql="select top 200 ordenservicio.*,clientes.clirazonsocial from ordenservicio inner join clientes on clientes.clicodigo=ordenservicio.idcliente where ".$filtro." order by idorden desc";
