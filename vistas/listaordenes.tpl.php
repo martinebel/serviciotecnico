@@ -259,7 +259,7 @@ $(function() {
 $(document).ready(function() {
   $('#dataTables-example').DataTable({
     responsive: true,
-    order: [[ 10, 'asc' ],[ 9, 'asc' ], [ 0, 'desc' ]]
+    order: [[ 9, 'asc' ], [ 0, 'desc' ]]
   });
 
   if(getParameterByName("q"))
