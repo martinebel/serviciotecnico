@@ -157,7 +157,7 @@
 						<div id="aviso"><div class="alert alert-danger" role="alert">La prioridad ALTA implica la resolución del equipo en las próximas 24hs.</div></div>
 <div id="divDocumento">
   <p>Ingrese DNI</p>
-<input type="text" id="documento" class="form-control" autocomplete="off">
+<input type="password" id="documento" class="form-control" autocomplete="off">
 <input type="hidden" name="idvendedor" id="idvendedor">
 </div>
             <p id="recibe"></p>
