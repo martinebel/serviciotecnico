@@ -149,7 +149,7 @@
                   <td>'.$row['idorden'].'</td>
                   <td>'.substr($row['clirazonsocial'],0,25).'</td>
                   <td>'.date_format($row['fechaingreso'],'d-m-Y').'</td>
-                  <td>'.$row['tipo'].'</td>
+                  <td>'.$row['tipo'].($row["garantia"]=="1"?' <strong>RMA</strong>':'').'</td>
                   <td>';
                   if(($row['estado']=="CERRADA")||($row['estado']=="FACTURADO"))
                   {
