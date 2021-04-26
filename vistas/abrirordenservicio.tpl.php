@@ -187,38 +187,107 @@
         <h4 class="modal-title">Nuevo Cliente</h4>
       </div>
       <div class="modal-body">
-         <div class="form-group">
-						<label for="nombrecliented">Cliente</label>
-						<input type="text" class="form-control" name="nombrecliented" id="nombrecliented" placeholder="Cliente">
+		<div class="row">
+		
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="nombrecliented">Cliente</label>
+					<input type="text" class="form-control" name="nombrecliented" id="nombrecliented" placeholder="Cliente">
+				</div>
+			</div>
+			
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="tipodoc">Tipo Doc</label>
+					<select class="form-control" name="tipodoc" id="tipodoc">
+						<option value="DNI" selected>DNI</option>
+						<option value="CUIT">CUIT</option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="numdoc">Nro Doc</label>
+					<input type="text" class="form-control" name="numdoc" id="numdoc" placeholder="Num Doc">
+				</div>
+			</div>
+			
+			<div class="col-md-4">
+				<div class="form-group">
+					<label for="clitipo">Tipo Cliente</label>
+					<select class="form-control" name="clitipo" id="clitipo">
+						<option value="1">Responsable Inscripto</option>
+						<option value="5" selected>Consumidor Final</option>
+						<option value="3">Exento</option>
+						<option value="4">No Responsable</option>
+						<option value="2">Responsable no Inscripto</option>
+						<option value="6">Monotributista</option>
+						<option value="7">Sujeto no Categorizado</option>
+					</select>
+				</div>
+			</div>
 
-						</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="telefonod">Telefono</label>
+					<input type="text" class="form-control" name="telefonod" id="telefonod" placeholder="Telefono">
+				</div>
+			</div>
+			
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="email">E-mail</label>
+					<input type="text" class="form-control" name="emaild" id="emaild" placeholder="Email">
+				</div>
+			</div>
 
+			<div class="col-md-6">				
+				<div class="form-group">
+					<label for="direccion">Direccion</label>
+					<input type="text" class="form-control" name="direccion" id="direccion" placeholder="Direccion">
+				</div>
+			</div>
 
-						<div class="form-group">
-						<label for="telefonod">Telefono</label>
-						<input type="text" class="form-control" name="telefonod" id="telefonod" placeholder="Telefono">
-						</div>
+			<div class="col-md-6">			
+				<div class="form-group">
+					<label for="localidad">Localidad</label>
+					<input type="text" class="form-control" name="localidad" id="localidad" placeholder="Localidad">
+				</div>
+			</div>
 
-						<div class="form-group">
-						<label for="email">E-mail</label>
-						<input type="text" class="form-control" name="emaild" id="emaild" placeholder="Email">
-						</div>
-
-						<div class="form-group">
-						<label for="direccion">Direccion</label>
-						<input type="text" class="form-control" name="direccion" id="direccion" placeholder="Direccion">
-						</div>
-
-						<div class="form-group">
-						<label for="localidad">Localidad</label>
-						<input type="text" class="form-control" name="localidad" id="localidad" placeholder="Localidad">
-						</div>
-
-						<div class="form-group">
-						<label for="provincia">Provincia</label>
-						<input type="text" class="form-control" name="provincia" id="provincia" placeholder="Provincia">
-						</div>
-
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="provincia">Provincia</label>
+					<select class="form-control" name="provincia" id="provincia">
+						<option value="BUENOS AIRES">BUENOS AIRES</option>
+						<option value="CATAMARCA">CATAMARCA</option>
+						<option value="CHACO" selected>CHACO</option>
+						<option value="CHUBUT">CHUBUT</option>
+						<option value="CORDOBA">CORDOBA</option>
+						<option value="CORRIENTES">CORRIENTES</option>
+						<option value="ENTRE RIOS">ENTRE RIOS</option>
+						<option value="FORMOSA">FORMOSA</option>
+						<option value="JUJUY">JUJUY</option>
+						<option value="LA PAMPA">LA PAMPA</option>
+						<option value="LA RIOJA">LA RIOJA</option>
+						<option value="MENDOZA">MENDOZA</option>
+						<option value="MISIONES">MISIONES</option>
+						<option value="NEUQUEN">NEUQUEN</option>
+						<option value="RIO NEGRO">RIO NEGRO</option>
+						<option value="SALTA">SALTA</option>
+						<option value="SAN JUAN">SAN JUAN</option>
+						<option value="SAN LUIS">SAN LUIS</option>
+						<option value="SANTA CRUZ">SANTA CRUZ</option>
+						<option value="SANTA FE">SANTA FE</option>
+						<option value="SANTIAGO DEL ESTERO">SANTIAGO DEL ESTERO</option>
+						<option value="TIERRA DEL FUEGO">TIERRA DEL FUEGO</option>
+						<option value="TUCUMAN">TUCUMAN</option>
+						<option value="CIUDAD AUTONOMA DE BUENOS AIRES">CIUDAD AUTONOMA DE BUENOS AIRES</option>
+					</select>
+				</div>
+			</div>
+</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -287,13 +356,15 @@ $(function() {
 		$("#emaild").val("");
 		$("#direccion").val("");
 		$("#localidad").val("");
-		$("#provincia").val("");
+		$("#provincia").val("CHACO");
+		$("#numdoc").val("");
 		 $("#nombrecliented").removeClass("has-danger");
 		  $("#telefonod").removeClass("has-danger");
 		   $("#emaild").removeClass("has-danger");
 		    $("#direccion").removeClass("has-danger");
 			 $("#localidad").removeClass("has-danger");
 			  $("#provincia").removeClass("has-danger");
+			  $("#numdoc").removeClass("has-danger");
 		$('#nuevoclientedialog').modal({
 		keyboard:false,
 		backdrop:'static'
@@ -319,6 +390,7 @@ $(function() {
 		    $("#direccion").removeClass("has-danger");
 			 $("#localidad").removeClass("has-danger");
 			  $("#provincia").removeClass("has-danger");
+			  $("#numdoc").removeClass("has-danger");
 
 		if($("#nombrecliented").val()==""){$("#nombrecliented").toggleClass("has-danger"); return;}
 		if($("#telefonod").val()==""){$("#telefonod").toggleClass("has-danger"); return;}
@@ -326,10 +398,11 @@ $(function() {
 		if($("#direccion").val()==""){$("#direccion").toggleClass("has-danger"); return;}
 		if($("#localidad").val()==""){$("#localidad").toggleClass("has-danger"); return;}
 		if($("#provincia").val()==""){$("#provincia").toggleClass("has-danger"); return;}
+		if($("#numdoc").val()==""){$("#numdoc").toggleClass("has-danger"); return;}
 
 		$.ajax({
         type: "POST",
-        url: "ajax_search.php?nuevo=true&nombre="+$("#nombrecliented").val()+"&telefono="+$("#telefonod").val()+"&email="+$("#emaild").val()+"&direccion="+$("#direccion").val()+"&localidad="+$("#localidad").val()+"&provincia="+$("#provincia").val(),
+        url: "ajax_search.php?nuevo=true&nombre="+$("#nombrecliented").val()+"&telefono="+$("#telefonod").val()+"&email="+$("#emaild").val()+"&direccion="+$("#direccion").val()+"&localidad="+$("#localidad").val()+"&provincia="+$("#provincia").val()+"&numdoc="+$("#numdoc").val()+"&tipodoc="+$("#tipodoc").val()+"&clitipo="+$("#clitipo").val(),
         processData: false,
         contentType: "application/json"
     })

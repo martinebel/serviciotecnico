@@ -194,9 +194,9 @@ $query="INSERT INTO Clientes
      VALUES
            (".$idcliente."
            ,'".strtoupper ($_REQUEST['nombre'])."'
-           ,'DNI'
-           ,'00000000'
-           ,5
+           ,'".$_REQUEST['tipodoc']."'
+           ,'".$_REQUEST['numdoc']."'
+           ,".$_REQUEST['clitipo']."
            ,'".$_REQUEST['direccion']."'
            ,'".$_REQUEST['localidad']."'
            ,'".$_REQUEST['provincia']."'
