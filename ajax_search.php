@@ -10,19 +10,19 @@ $html="";
   $return = array();
     $json = "[";
     $first = true;
-	
-	
+
+
 if(isset($_REQUEST['tipo']))
 {
-	
-	
+
+
 	$query="SELECT top 50 productos.*,productolista.importe from productos inner join productolista on productolista.idproducto=productos.procodigo where idlista=1 and probaja=0 and procodigo= ".$name."";
  $stmt = sqlsrv_query( $conn, $query );
 if( $stmt === false) {
    $query="SELECT top 50 productos.*,productolista.importe from productos inner join productolista on productolista.idproducto=productos.procodigo where idlista=1 and probaja=0 and prodescripcion like '".$name."%' order by prodescripcion asc";
  $stmt = sqlsrv_query( $conn, $query );
  while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                
+
 
 
       if(!$first){
@@ -32,12 +32,12 @@ if( $stmt === false) {
         }
 
           $json .= '{"id":"'.$row['ProCodigo'].'","label":"['.$row['ProCodigo'].'] '.str_replace('"','',$row['ProDescripcion']).'","value":"'.str_replace('"','',$row['ProDescripcion']).'","precio":"'.str_replace('"','',$row['importe']).'"}';
-	
+
      }
 }
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                
+
 
 
       if(!$first){
@@ -47,7 +47,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
         }
 
          $json .= '{"id":"'.$row['ProCodigo'].'","label":"['.$row['ProCodigo'].'] '.str_replace('"','',$row['ProDescripcion']).'","value":"'.str_replace('"','',$row['ProDescripcion']).'","precio":"'.str_replace('"','',$row['importe']).'"}';
-	
+
      }
 	     $json .= "]";
 
@@ -66,7 +66,7 @@ if( $stmt === false) {
 }
 
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                
+
 
 
       if(!$first){
@@ -76,14 +76,14 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
         }
 
         $json .= '{"id":"'.$row['CliCodigo'].'","label":"['.$row['CliCodigo'].'] '.utf8_encode(trim($row['CliRazonSocial'])).'","value":"['.$row['CliCodigo'].'] '.utf8_encode(trim($row['CliRazonSocial'])).'"}';
-	
+
      }
 
 
     $json .= "]";
 header('Content-Type: application/json; charset=utf-8');
     echo $json;
-  
+
 }
 
 if(isset($_REQUEST['factura']))
@@ -102,7 +102,7 @@ $rows = sqlsrv_has_rows( $stmt );
 if($rows===true)
 {
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                
+
 
 
       if(!$first){
@@ -112,7 +112,7 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
         }
 
         $json .= '{"msg":"OK"}';
-  
+
      }
    }
    else
@@ -148,7 +148,7 @@ if( $stmt === false) {
 }
 
 
-	$output_array = array();	  
+	$output_array = array();
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
     $output_array[] = array( 'telefono' => $row['CliTelefono'], 'email' => $row['CliEmail'] );
 }
@@ -164,7 +164,7 @@ $query="SELECT max(clicodigo) as 'maximo' from clientes";
   $stmt = sqlsrv_query( $conn, $query );
 if( $stmt === false) {
     die( print_r( sqlsrv_errors(), true) );
-}	  
+}
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
    $idcliente=$row["maximo"];
 }
@@ -195,7 +195,7 @@ $query="INSERT INTO Clientes
            ,[cli_recargas_toner])
      VALUES
            (".$idcliente."
-           ,'".strtoupper ($_REQUEST['nombre'])."'
+           ,'".strtoupper(utf8_decode(trim($_REQUEST['nombre'])))."'
            ,'".$_REQUEST['tipodoc']."'
            ,'".$_REQUEST['numdoc']."'
            ,".$_REQUEST['clitipo']."
@@ -238,7 +238,7 @@ $query="SELECT * from ordenservicio where idorden=".$_REQUEST['buscarorden']." a
   $stmt = sqlsrv_query( $conn, $query );
 if( $stmt === false) {
     die( print_r( sqlsrv_errors(), true) );
-}	  
+}
 while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
    $idorden=$row["idorden"];
 }

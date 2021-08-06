@@ -188,14 +188,14 @@
       </div>
       <div class="modal-body">
 		<div class="row">
-		
+
 			<div class="col-md-12">
 				<div class="form-group">
 					<label for="nombrecliented">Cliente</label>
 					<input type="text" class="form-control" name="nombrecliented" id="nombrecliented" placeholder="Cliente">
 				</div>
 			</div>
-			
+
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="tipodoc">Tipo Doc</label>
@@ -205,14 +205,14 @@
 					</select>
 				</div>
 			</div>
-			
+
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="numdoc">Nro Doc</label>
 					<input type="text" class="form-control" name="numdoc" id="numdoc" placeholder="Num Doc">
 				</div>
 			</div>
-			
+
 			<div class="col-md-4">
 				<div class="form-group">
 					<label for="clitipo">Tipo Cliente</label>
@@ -234,7 +234,7 @@
 					<input type="text" class="form-control" name="telefonod" id="telefonod" placeholder="Telefono">
 				</div>
 			</div>
-			
+
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="email">E-mail</label>
@@ -242,14 +242,14 @@
 				</div>
 			</div>
 
-			<div class="col-md-6">				
+			<div class="col-md-6">
 				<div class="form-group">
 					<label for="direccion">Direccion</label>
 					<input type="text" class="form-control" name="direccion" id="direccion" placeholder="Direccion">
 				</div>
 			</div>
 
-			<div class="col-md-6">			
+			<div class="col-md-6">
 				<div class="form-group">
 					<label for="localidad">Localidad</label>
 					<input type="text" class="form-control" name="localidad" id="localidad" placeholder="Localidad">
@@ -402,7 +402,7 @@ $(function() {
 
 		$.ajax({
         type: "POST",
-        url: "ajax_search.php?nuevo=true&nombre="+$("#nombrecliented").val()+"&telefono="+$("#telefonod").val()+"&email="+$("#emaild").val()+"&direccion="+$("#direccion").val()+"&localidad="+$("#localidad").val()+"&provincia="+$("#provincia").val()+"&numdoc="+$("#numdoc").val()+"&tipodoc="+$("#tipodoc").val()+"&clitipo="+$("#clitipo").val(),
+        url: "ajax_search.php?nuevo=true&nombre="+$("#nombrecliented").val().toUpperCase()+"&telefono="+$("#telefonod").val()+"&email="+$("#emaild").val()+"&direccion="+$("#direccion").val()+"&localidad="+$("#localidad").val()+"&provincia="+$("#provincia").val()+"&numdoc="+$("#numdoc").val()+"&tipodoc="+$("#tipodoc").val()+"&clitipo="+$("#clitipo").val(),
         processData: false,
         contentType: "application/json"
     })
