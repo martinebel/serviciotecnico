@@ -1,4 +1,5 @@
 <?php
+
 require("db.php");
 
 //busqueda ajax de cliente
@@ -57,7 +58,8 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 
 
 
-$query="SELECT top 10 * from clientes where clirazonsocial like '%".$name."%'";
+$query="SELECT top 10 * from clientes where clirazonsocial like '%".utf8_decode(trim($name))."%'";
+
  $stmt = sqlsrv_query( $conn, $query );
 if( $stmt === false) {
     die( print_r( sqlsrv_errors(), true) );
@@ -73,13 +75,13 @@ while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
             $first = false;
         }
 
-        $json .= '{"id":"'.$row['CliCodigo'].'","label":"['.$row['CliCodigo'].'] '.$row['CliRazonSocial'].'","value":"['.$row['CliCodigo'].'] '.$row['CliRazonSocial'].'"}';
+        $json .= '{"id":"'.$row['CliCodigo'].'","label":"['.$row['CliCodigo'].'] '.utf8_encode(trim($row['CliRazonSocial'])).'","value":"['.$row['CliCodigo'].'] '.utf8_encode(trim($row['CliRazonSocial'])).'"}';
 	
      }
 
 
     $json .= "]";
-
+header('Content-Type: application/json; charset=utf-8');
     echo $json;
   
 }
@@ -205,7 +207,7 @@ $query="INSERT INTO Clientes
            ,'".$_REQUEST['email']."'
            ,1
            ,' '
-           ,NULL
+           ,'".date('Y-m-d h:i:s')."'
            ,0
            ,'MINORISTAS'
            ,1
@@ -218,10 +220,10 @@ $query="INSERT INTO Clientes
 //insertar en la tabla de listas de precio
 $query="insert into clientelista (clicodigo,idlista) values (".$idcliente.",1)";
   $stmt = sqlsrv_query( $conn, $query );
-  $query="insert into clientelista (clicodigo,idlista) values (".$idcliente.",6)";
+  $query="insert into clientelista (clicodigo,idlista) values (".$idcliente.",12)";
   $stmt = sqlsrv_query( $conn, $query );
-  $query="insert into clientelista (clicodigo,idlista) values (".$idcliente.",8)";
-  $stmt = sqlsrv_query( $conn, $query );
+  //$query="insert into clientelista (clicodigo,idlista) values (".$idcliente.",8)";
+  //$stmt = sqlsrv_query( $conn, $query );
   //devolver los datos en AJAX
    $output_array[] = array( 'codigo' => $idcliente, 'telefono' => $_REQUEST['telefono'], 'email' => $_REQUEST['email'], 'nombre' => $_REQUEST['nombre'] );
    echo json_encode( $output_array );
